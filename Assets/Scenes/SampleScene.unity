@@ -376,8 +376,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b9e4a8777fd2a240bc8620ced60e2fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 639675390}
-  anim: {fileID: 639675394}
+  speed: 10
+  jumpForce: 350
 --- !u!95 &639675394
 Animator:
   serializedVersion: 3
@@ -411,7 +411,7 @@ GameObject:
   - component: {fileID: 759503041}
   m_Layer: 0
   m_Name: Foreground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5965,7 +5965,7 @@ GameObject:
   - component: {fileID: 1679843490}
   m_Layer: 0
   m_Name: Grid
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
