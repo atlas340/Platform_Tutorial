@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void onCollisionEnter2D(Collision2D other)
+    private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Ground"))
         {
