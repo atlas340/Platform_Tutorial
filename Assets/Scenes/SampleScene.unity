@@ -233,7 +233,7 @@ GameObject:
   - component: {fileID: 639675392}
   - component: {fileID: 639675393}
   - component: {fileID: 639675394}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: MainCamera
   m_Icon: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
@@ -378,6 +378,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   jumpForce: 350
+  ground:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!95 &639675394
 Animator:
   serializedVersion: 3
@@ -409,7 +412,7 @@ GameObject:
   - component: {fileID: 759503040}
   - component: {fileID: 759503039}
   - component: {fileID: 759503041}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Foreground
   m_TagString: Ground
   m_Icon: {fileID: 0}

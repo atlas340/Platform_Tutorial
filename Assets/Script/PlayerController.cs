@@ -9,13 +9,18 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;// playerı tanımlamış olduk. Unityde de bunu attachledik player diye.
     private Animator anim;
-    private enum State {idle, running, jumping};
+    private enum State { idle, running, jump, fall };
     private State state = State.idle;
-   
+
     public float speed;
     public float jumpForce;
 
     private bool isJumping;
+    
+
+    [SerializeField] private LayerMask ground;
+    private Collider2D coll;
+ 
     
  
     // Start is called before the first frame update
@@ -24,6 +29,7 @@ public class PlayerController : MonoBehaviour
         
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        coll = GetComponent<Collider2D>();
         
 
     }
@@ -33,7 +39,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
 
-
+        Jump();
         float hDirection = Input.GetAxis("Horizontal");
         //float jDirection = Input.GetAxis("Jump");
 
@@ -50,25 +56,70 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector2(-5, rb.velocity.y); //x , y yi belirledik velocitynin içinde.
             transform.localScale = new Vector2(-1, transform.localScale.y);// karakteri flip yapar sağa sola
-            state = State.running;
+            
+
+            if (isJumping)
+            {
+                state = State.jump;
+
+            }
+            else if (!coll.IsTouchingLayers(ground) && !isJumping)
+            {
+                state = State.fall;
+            }
+            else
+            {
+                state = State.running;
+                isJumping = false;
+            }
+
           
         }
        else if (hDirection>0)
         {
             rb.velocity = new Vector2(5, rb.velocity.y);//.1f yazınca ordaki f float olduğunu söyler. y kısmı gravityi belirler(y kısmına rb.velocity.y yazmak daha mantıklı.)
             transform.localScale = new Vector2(1, transform.localScale.y);
-            state = State.running;
-          
+            
 
+            if (isJumping)
+            {
+                state = State.jump;
+
+            }
+            else if (!coll.IsTouchingLayers(ground) && !isJumping)
+            {
+                state = State.fall;
+            }
+            else
+            {
+                state = State.running;
+                isJumping = false;
+            }
+
+
+        }
+        else if (!coll.IsTouchingLayers(ground) && !isJumping)
+        {
+            state = State.fall;
         }
         else
         {
+            if (isJumping)
+            {
+                state = State.jump;
+            }
+            else
+            {
+                state = State.idle;
+                isJumping = false;
+
+            }
 
             //rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y);
-            state = State.idle;
+            
         }
 
-        Jump();
+
         //if (Input.GetKeyDown("Space")) 
         //{
             
@@ -99,6 +150,8 @@ public class PlayerController : MonoBehaviour
             isJumping = true;
 
             rb.AddForce(new Vector2(rb.velocity.x, jumpForce));
+            state = State.jump;
+            
         }
     }
 
@@ -111,6 +164,8 @@ public class PlayerController : MonoBehaviour
             rb.velocity = Vector2.zero;
         }
     }
+
+
     
     
 
