@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-
+//21.dersteyim
 public class PlayerController : MonoBehaviour
 {
 
@@ -12,14 +12,16 @@ public class PlayerController : MonoBehaviour
     private enum State { idle, running, jump, fall };
     private State state = State.idle;
 
-    public float speed;
-    public float jumpForce;
+    [SerializeField]private float speed = 5f;
+    [SerializeField]private float jumpForce= 10f;
 
     private bool isJumping;
     
 
     [SerializeField] private LayerMask ground;
     private Collider2D coll;
+
+    public int cherries = 0;
  
     
  
@@ -40,6 +42,35 @@ public class PlayerController : MonoBehaviour
     {
 
         Jump();
+        Movement();
+        anim.SetInteger("State", (int)state);
+
+
+        //if (Input.GetKeyDown("Space")) 
+        //{
+
+
+
+
+
+        //    //if( rb.velocity == new Vector2(rb.velocity.x, 5))
+        //    //{
+        //    //    if (Input.GetKey(KeyCode.Space))
+        //    //    {
+        //    //        rb.velocity = new Vector2(rb.velocity.x, 5);
+        //    //    }
+        //    //}
+
+        //}
+
+
+
+        //VelocityState();
+
+    }
+
+    private void Movement()
+    {
         float hDirection = Input.GetAxis("Horizontal");
         //float jDirection = Input.GetAxis("Jump");
 
@@ -52,11 +83,11 @@ public class PlayerController : MonoBehaviour
         //    isFalling = false;
         //}
 
-        if (hDirection<0)
+        if (hDirection < 0)
         {
-            rb.velocity = new Vector2(-5, rb.velocity.y); //x , y yi belirledik velocitynin içinde.
+            rb.velocity = new Vector2(-speed, rb.velocity.y); //x , y yi belirledik velocitynin içinde.
             transform.localScale = new Vector2(-1, transform.localScale.y);// karakteri flip yapar sağa sola
-            
+
 
             if (isJumping)
             {
@@ -73,13 +104,13 @@ public class PlayerController : MonoBehaviour
                 isJumping = false;
             }
 
-          
+
         }
-       else if (hDirection>0)
+        else if (hDirection > 0)
         {
-            rb.velocity = new Vector2(5, rb.velocity.y);//.1f yazınca ordaki f float olduğunu söyler. y kısmı gravityi belirler(y kısmına rb.velocity.y yazmak daha mantıklı.)
+            rb.velocity = new Vector2(speed, rb.velocity.y);//.1f yazınca ordaki f float olduğunu söyler. y kısmı gravityi belirler(y kısmına rb.velocity.y yazmak daha mantıklı.)
             transform.localScale = new Vector2(1, transform.localScale.y);
-            
+
 
             if (isJumping)
             {
@@ -116,31 +147,8 @@ public class PlayerController : MonoBehaviour
             }
 
             //rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y);
-            
+
         }
-
-
-        //if (Input.GetKeyDown("Space")) 
-        //{
-            
-            
-            
-           
-            
-        //    //if( rb.velocity == new Vector2(rb.velocity.x, 5))
-        //    //{
-        //    //    if (Input.GetKey(KeyCode.Space))
-        //    //    {
-        //    //        rb.velocity = new Vector2(rb.velocity.x, 5);
-        //    //    }
-        //    //}
-            
-        //}
-        
-
-
-        //VelocityState();
-        anim.SetInteger("State", (int)state);
     }
 
     private void Jump()
@@ -150,8 +158,16 @@ public class PlayerController : MonoBehaviour
             isJumping = true;
 
             rb.AddForce(new Vector2(rb.velocity.x, jumpForce));
-            state = State.jump;
             
+            
+            if (rb.velocity.y < .1f)
+            {
+                state = State.fall;
+            }
+            else
+            {
+                state = State.jump;
+            }
         }
     }
 
@@ -165,13 +181,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Collactable")
+        {
+            Destroy(collision.gameObject);
+            cherries += 1;
+        }
 
-    
-    
+    }
+
+
 
     //private void VelocityState()
     //{
-    //    if(state == State.jumping)
+    //    if (state == State.jump)
     //    {
     //        //Jumping
     //    }
@@ -187,5 +211,5 @@ public class PlayerController : MonoBehaviour
     //    }
 
     //}
-    //
+
 }
